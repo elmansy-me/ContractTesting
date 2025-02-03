@@ -7,10 +7,17 @@
 
 import SwiftUI
 import Consumer
+import CartModule
 
 @MainActor
 class AppCoordinator {
 
+    lazy var mediator: MediatorInteractor = {
+        let provider: CartInteractor = CartModule.contract
+        let mediator = MediatorInteractorImpl(cartProvider: provider)
+        return mediator
+    }()
+    
     func start() -> some View {
         setupInitialConfiguration()
         let view = HomeView()
@@ -18,7 +25,6 @@ class AppCoordinator {
     }
     
     private func setupInitialConfiguration() {
-        let implementation = ConsumerContractImpl()
-        Consumer.contract = implementation
+        Consumer.contract = mediator
     }
 }

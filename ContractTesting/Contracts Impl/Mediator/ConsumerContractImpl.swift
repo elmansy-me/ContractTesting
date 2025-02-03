@@ -11,7 +11,15 @@ import CartModule
 import SwiftUI
 import Combine
 
-class ConsumerContractImpl: ConsumerContract {
+class MediatorInteractorImpl: MediatorInteractor {
+    
+    let cartProvider: CartInteractor
+    
+    init(cartProvider: CartInteractor) {
+        self.cartProvider = cartProvider
+        bind()
+    }
+    
      
     var cartBadgeView: AnyPublisher<AnyView, Never> {
         $_cartBadgeView.eraseToAnyPublisher()
@@ -19,25 +27,21 @@ class ConsumerContractImpl: ConsumerContract {
     
     @Published private var _cartBadgeView: AnyView = AnyView(Text("ConsumerContractImpl"))
     
-    init() {
-        bind()
-    }
-    
     private var cancellables = Set<AnyCancellable>()
     
     func addItem(item: ConsumerCartItem) {
         let item = CartItemModel(item: item)
         print("🔥 ParentApp: Passing consumer's AddItem request to CartModule")
-        CartModule.contract.addItem(item: item)
+        cartProvider.addItem(item: item)
     }
     
     func removeLastItem() {
         print("🔥 ParentApp: Passing consumer's RemoveItem request to CartModule")
-        CartModule.contract.removeLastItem()
+        cartProvider.removeLastItem()
     }
     
     func bind() {
-        CartModule.contract.view.sink { [weak self] view in
+        cartProvider.view.sink { [weak self] view in
             print("🔥 ParentApp: Passing CartModule's cartBadgeView to Consumer")
             self?._cartBadgeView = view
         }.store(in: &cancellables)
