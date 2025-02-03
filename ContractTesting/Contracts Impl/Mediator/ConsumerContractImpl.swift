@@ -21,11 +21,13 @@ class MediatorInteractorImpl: MediatorInteractor {
     }
     
      
-    var cartBadgeView: AnyPublisher<AnyView, Never> {
-        $_cartBadgeView.eraseToAnyPublisher()
+    var cartBadgeInfo: AnyPublisher<Consumer.CartBadgeInfo, Never> {
+        $_cartBadgeInfo
+            .compactMap{ $0 }
+            .eraseToAnyPublisher()
     }
     
-    @Published private var _cartBadgeView: AnyView = AnyView(Text("ConsumerContractImpl"))
+    @Published private var _cartBadgeInfo: CartBadgeInfo?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -41,9 +43,9 @@ class MediatorInteractorImpl: MediatorInteractor {
     }
     
     func bind() {
-        cartProvider.view.sink { [weak self] view in
+        cartProvider.cartBadgeInfo.sink { [weak self] data in
             print("🔥 ParentApp: Passing CartModule's cartBadgeView to Consumer")
-            self?._cartBadgeView = view
+            self?._cartBadgeInfo = .init(shouldAppear: data.shouldAppear, totalPrice: data.totalPrice)
         }.store(in: &cancellables)
     }
 }

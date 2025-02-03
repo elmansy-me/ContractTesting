@@ -11,11 +11,13 @@ import Combine
 
 class HomeInteractorImpl: HomeInteractor {
     
-    var cartBadgeView: AnyPublisher<AnyView, Never> {
-        $_cartBadgeView.eraseToAnyPublisher()
+    var cartBadgeInfo: AnyPublisher<CartBadgeInfo, Never> {
+        $_cartBadgeInfo
+            .compactMap { $0 }
+                .eraseToAnyPublisher()
     }
     
-    @Published private var _cartBadgeView: AnyView = AnyView(EmptyView())
+    @Published private var _cartBadgeInfo: CartBadgeInfo?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -39,9 +41,9 @@ class HomeInteractorImpl: HomeInteractor {
     }
     
     func bind() {
-        contract?.cartBadgeView.sink(receiveValue: { [weak self] view in
-            print("🔥 Consumer: Did recieve a new cart badge view.")
-            self?._cartBadgeView = view
+        contract?.cartBadgeInfo.sink(receiveValue: { [weak self] data in
+            print("🔥 Consumer: Did recieve a new cart info data.")
+            self?._cartBadgeInfo = data
         }).store(in: &cancellables)
     }
     

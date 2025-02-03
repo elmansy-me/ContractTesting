@@ -11,7 +11,7 @@ import Combine
 
 @MainActor
 protocol HomeInteractor {
-    var cartBadgeView: AnyPublisher<AnyView, Never> { get }
+    var cartBadgeInfo: AnyPublisher<CartBadgeInfo, Never> { get }
     func addRandomProduct()
     func removeRandomProduct()
 }

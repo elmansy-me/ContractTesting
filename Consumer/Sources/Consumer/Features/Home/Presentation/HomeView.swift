@@ -39,10 +39,11 @@ struct HomeView: View {
             
             Spacer()
             
-            Text("Cart Badge")
-                .font(.headline)
-                .foregroundColor(Color.primary)
-            viewModel.cartBadgeView
+            if viewModel.shouldShowCartBadge {
+                Text("Total price = \(viewModel.totalPrice)")
+                    .font(.headline)
+                    .foregroundColor(Color.primary)
+            }
         }
         .padding()
     }

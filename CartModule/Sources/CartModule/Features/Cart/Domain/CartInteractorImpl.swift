@@ -11,11 +11,13 @@ import Combine
 
 class CartInteractorImpl: CartInteractor {
     
-    @Published private var _view: AnyView = AnyView(Text("CartInteractorImpl"))
-    
-    var view: AnyPublisher<AnyView, Never> {
-        $_view.eraseToAnyPublisher()
+    var cartBadgeInfo: AnyPublisher<any CartBadgeInfo, Never> {
+        $_cartBadgeInfo
+            .compactMap { $0 }
+            .eraseToAnyPublisher()
     }
+    
+    @Published private var _cartBadgeInfo: CartBadgeInfo?
     
     private var items: [any CartItem] = []
     
@@ -39,11 +41,11 @@ class CartInteractorImpl: CartInteractor {
     private func updateCartBadgeView() {
         guard !items.isEmpty else {
             print("🔥 CartModule: Updating cart badge to empty state.")
-            _view = AnyView(Text("Cart is empty"))
+            _cartBadgeInfo = CartBadgeInfoModel(shouldAppear: false, totalPrice: 0)
             return
         }
         print("🔥 CartModule: Updating cart badge to content state.")
-        _view = AnyView(Text("Total: \(totalPrice, specifier: "%.2f") $"))
+        _cartBadgeInfo = CartBadgeInfoModel(shouldAppear: true, totalPrice: totalPrice)
     }
     
 }

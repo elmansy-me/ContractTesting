@@ -12,13 +12,17 @@ import Combine
 @MainActor
 class HomeViewModel: ObservableObject {
 
+    @Published var shouldShowCartBadge: Bool = false
+    @Published var totalPrice: Double = 0
+    
     private let interactor: HomeInteractor
     private var cancellables = Set<AnyCancellable>()
     
     init(interactor: HomeInteractor) {
         self.interactor = interactor
-        interactor.cartBadgeView.sink { [weak self] view in
-            self?.cartBadgeView = view
+        interactor.cartBadgeInfo.sink { [weak self] data in
+            self?.shouldShowCartBadge = data.shouldAppear
+            self?.totalPrice = data.totalPrice
         }.store(in: &cancellables)
     }
     

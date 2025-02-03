@@ -11,7 +11,7 @@ import Combine
 
 @MainActor
 public protocol CartInteractor {
-    var view: AnyPublisher<AnyView, Never> { get }
+    var cartBadgeInfo: AnyPublisher<CartBadgeInfo, Never> { get }
     func addItem(item: CartItem)
     func removeLastItem()
     var totalPrice: Double { get }
