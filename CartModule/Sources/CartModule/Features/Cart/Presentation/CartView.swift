@@ -8,18 +8,13 @@
 import SwiftUI
 
 struct CartView: View {
-    
-    let totalPrice: Double
-    
-    init(totalPrice: Double) {
-        self.totalPrice = totalPrice
-    }
+    @ObservedObject var viewModel: CartViewModel
     
     var body: some View {
         Button(action: {
             // TODO: Add Implementation
         }) {
-            Text("Total Price = \(totalPrice)")
+          Text("Total Price = \(viewModel.totalPrice)")
                 .font(.headline)
                 .foregroundColor(Color(.systemBackground))
                 .frame(maxWidth: .infinity, minHeight: 50)

@@ -10,4 +10,5 @@ import Foundation
 struct CartItemModel: CartItem {
     let id: String
     let price: Double
+    var count: Int
 }

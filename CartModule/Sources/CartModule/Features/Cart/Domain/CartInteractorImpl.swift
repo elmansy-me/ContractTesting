@@ -10,40 +10,32 @@ import SwiftUI
 import Combine
 
 class CartInteractorImpl: CartInteractor {
-    
-    @Published private var _view: AnyView = AnyView(Text("CartInteractorImpl"))
-    
-    var view: AnyPublisher<AnyView, Never> {
-        $_view.eraseToAnyPublisher()
-    }
-    
     private var items: [any CartItem] = []
+    private lazy var cartViewModel = CartViewModel()
+  
+    var cartBadgeView: () -> any View {
+      {
+        CartView(viewModel: self.cartViewModel)
+      }
+    }
     
-    func addItem(item: any CartItem) {
+    func addItem(_ item: any CartItem) {
         items.append(item)
+      
         print("🔥 CartModule: CartItem has been added successfully.")
-        updateCartBadgeView()
+        _ = cartViewModel.addItemPrice(item.price)
     }
     
-    func removeLastItem() {
-        guard !items.isEmpty else { return }
-        items.removeLast()
-        print("🔥 CartModule: CartItem has been removed successfully.")
-        updateCartBadgeView()
-    }
-    
-    var totalPrice: Double {
-        items.map { $0.price }.reduce(0, +)
-    }
-    
-    private func updateCartBadgeView() {
-        guard !items.isEmpty else {
-            print("🔥 CartModule: Updating cart badge to empty state.")
-            _view = AnyView(Text("Cart is empty"))
-            return
+    func removeItem(_ item: any CartItem) {
+        guard let index = items.firstIndex(where: { $0.id == item.id }) else { return }
+      
+        if items[index].count == 1 {
+          items.remove(at: index)
+        } else {
+          items[index].count -= 1
         }
-        print("🔥 CartModule: Updating cart badge to content state.")
-        _view = AnyView(Text("Total: \(totalPrice, specifier: "%.2f") $"))
+      
+        print("🔥 CartModule: CartItem has been removed successfully.")
+        _ = cartViewModel.substractItemPrice(items.last!.price)
     }
-    
 }

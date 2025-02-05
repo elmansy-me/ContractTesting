@@ -8,16 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
-    
-    @StateObject var viewModel: HomeViewModel
-    
-    init(viewModel: HomeViewModel) {
-        _viewModel = .init(wrappedValue: viewModel)
-    }
+    @ObservedObject var viewModel: HomeViewModel
     
     var body: some View {
         VStack {
-            Button(action: viewModel.addRandomProduct) {
+            Button(action: addRandomItem) {
                 Text("Add Random Product")
                     .font(.headline)
                     .foregroundColor(Color(.systemBackground))
@@ -27,7 +22,7 @@ struct HomeView: View {
             }
             .contentShape(Rectangle())
             
-            Button(action: viewModel.removeRandomProduct) {
+            Button(action: removeRandomItem) {
                 Text("Remove Random Product")
                     .font(.headline)
                     .foregroundColor(Color(.systemBackground))
@@ -42,8 +37,19 @@ struct HomeView: View {
             Text("Cart Badge")
                 .font(.headline)
                 .foregroundColor(Color.primary)
-            viewModel.cartBadgeView
+          
+            AnyView(viewModel.cartBadgeView())
         }
         .padding()
+    }
+  
+    private func addRandomItem() {
+        let item = ConsumerCartItemModel(id: "\(Int.random(in: 0..<5))", price: 120.00, count: 1)
+        viewModel.addItem(item)
+    }
+    
+    private func removeRandomItem() {
+        let item = ConsumerCartItemModel(id: "\(Int.random(in: 0..<5))", price: 120.00, count: 1)
+        viewModel.removeItem(item)
     }
 }

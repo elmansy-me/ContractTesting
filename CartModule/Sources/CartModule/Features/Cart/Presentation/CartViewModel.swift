@@ -8,12 +8,25 @@
 import Foundation
 
 @MainActor
-class CartViewModel: ObservableObject {
+final class CartViewModel: ObservableObject {
+    @Published var totalPrice: Double = 0
     
-    var totalPrice: Double
-    
-    init(totalPrice: Double) {
-        self.totalPrice = totalPrice
+    init() {}
+  
+    func addItemPrice(_ price: Double) -> Bool {
+        totalPrice += price
+        return true
+    }
+  
+    func substractItemPrice(_ price: Double) -> Bool {
+        if totalPrice >= price {
+            totalPrice -= price
+            return true
+        }
+        return false
     }
     
+    func updateTotalPrice(_ price: Double) {
+      self.totalPrice += price
+    }
 }

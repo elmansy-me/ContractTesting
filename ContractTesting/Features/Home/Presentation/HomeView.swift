@@ -9,7 +9,6 @@ import SwiftUI
 import Consumer
 
 struct HomeView: View {
-    
     var body: some View {
         Consumer.HomeBuilder.build()
     }

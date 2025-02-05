@@ -17,33 +17,25 @@ class MediatorInteractorImpl: MediatorInteractor {
     
     init(cartProvider: CartInteractor) {
         self.cartProvider = cartProvider
-        bind()
     }
     
-     
-    var cartBadgeView: AnyPublisher<AnyView, Never> {
-        $_cartBadgeView.eraseToAnyPublisher()
+    var cartBadgeView: () -> any View {
+        cartProvider.cartBadgeView
     }
-    
-    @Published private var _cartBadgeView: AnyView = AnyView(Text("ConsumerContractImpl"))
     
     private var cancellables = Set<AnyCancellable>()
     
-    func addItem(item: ConsumerCartItem) {
+    func addItem(item: any MarketplaceCartItem) {
         let item = CartItemModel(item: item)
+        
         print("🔥 ParentApp: Passing consumer's AddItem request to CartModule")
-        cartProvider.addItem(item: item)
+        cartProvider.addItem(item)
     }
     
-    func removeLastItem() {
+    func removeItem(item: any MarketplaceCartItem) {
+        let item = CartItemModel(item: item)
+        
         print("🔥 ParentApp: Passing consumer's RemoveItem request to CartModule")
-        cartProvider.removeLastItem()
-    }
-    
-    func bind() {
-        cartProvider.view.sink { [weak self] view in
-            print("🔥 ParentApp: Passing CartModule's cartBadgeView to Consumer")
-            self?._cartBadgeView = view
-        }.store(in: &cancellables)
+        cartProvider.removeItem(item)
     }
 }

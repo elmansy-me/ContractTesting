@@ -11,26 +11,21 @@ import Combine
 
 @MainActor
 class HomeViewModel: ObservableObject {
-
-    private let interactor: HomeInteractor
-    private var cancellables = Set<AnyCancellable>()
+    private let cartProvider: MarketplaceCartProvider
     
-    init(interactor: HomeInteractor) {
-        self.interactor = interactor
-        interactor.cartBadgeView.sink { [weak self] view in
-            self?.cartBadgeView = view
-        }.store(in: &cancellables)
+    init(cartProvider: MarketplaceCartProvider) {
+        self.cartProvider = cartProvider
     }
     
-    var cartBadgeView: AnyView = AnyView(Text("HomeVM"))
-    
-    func addRandomProduct() {
-        interactor.addRandomProduct()
+    var cartBadgeView: () -> any View {
+        cartProvider.cartBadgeView
     }
     
-    func removeRandomProduct() {
-        interactor.removeRandomProduct()
+    func addItem(_ item: any MarketplaceCartItem) {
+        cartProvider.addItem(item)
     }
     
-    
+    func removeItem(_ item: any MarketplaceCartItem) {
+        cartProvider.removeItem(item)
+    }
 }

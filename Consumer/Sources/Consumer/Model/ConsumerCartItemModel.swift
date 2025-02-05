@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct ConsumerCartItemModel: ConsumerCartItem {
+struct ConsumerCartItemModel: MarketplaceCartItem {
     let id: String
     let price: Double
+    let count: Int
 }

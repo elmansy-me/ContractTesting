@@ -7,11 +7,11 @@
 
 import Foundation
 import SwiftUI
-import Combine
 
 @MainActor
-protocol HomeInteractor {
-    var cartBadgeView: AnyPublisher<AnyView, Never> { get }
-    func addRandomProduct()
-    func removeRandomProduct()
+protocol MarketplaceCartProvider {
+    var cartBadgeView: () -> any View { get }
+
+    func addItem(_ item: any MarketplaceCartItem) async throws
+    func removeItem(_ item: any MarketplaceCartItem) async throws    
 }

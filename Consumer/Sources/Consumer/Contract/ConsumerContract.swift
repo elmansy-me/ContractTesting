@@ -13,7 +13,8 @@ import Combine
 
 @MainActor
 public protocol ConsumerContract {
-    var cartBadgeView: AnyPublisher<AnyView, Never> { get }
-    func addItem(item: ConsumerCartItem)
-    func removeLastItem()
+    var cartBadgeView: () -> any View { get }
+
+    func addItem(item: any MarketplaceCartItem)
+    func removeItem(item: any MarketplaceCartItem)
 }

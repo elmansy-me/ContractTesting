@@ -10,4 +10,5 @@ import Foundation
 public protocol CartItem {
     var id: String { get }
     var price: Double { get }
+    var count: Int { get set }
 }
