@@ -13,18 +13,14 @@ import CartModule
 class AppCoordinator {
 
     lazy var mediator: MediatorInteractor = {
-        let provider: CartInteractor = CartModule.contract
-        let mediator = MediatorInteractorImpl(cartProvider: provider)
+        let provider: ExpressCartInteractor = ExpressCartModule.contract
+        let mediator = CartMediatorImpl(cartProvider: provider)
         return mediator
     }()
     
     func start() -> some View {
-        setupInitialConfiguration()
-        let view = HomeView()
-        return view
-    }
-    
-    private func setupInitialConfiguration() {
-        Consumer.contract = mediator
+        let cartInteractor = ExpressCartModule.contract
+        let mediator = CartMediatorImpl(cartProvider: cartInteractor)
+        return HomeView(cartInteractor: mediator)
     }
 }

@@ -7,8 +7,10 @@
 
 import Foundation
 
-public protocol MarketplaceCartItem: Identifiable {
+public protocol MarketplaceCartItem: Identifiable, Sendable {
     var id: String { get }
+    var name: String { get }
     var price: Double { get }
-    var count: Int { get }
+    var currency: String { get }
+    var quantity: Int { get }
 }

@@ -11,21 +11,25 @@ import Combine
 
 @MainActor
 class HomeViewModel: ObservableObject {
-    private let cartProvider: MarketplaceCartProvider
+    private let cartHandler: CartHandler
     
-    init(cartProvider: MarketplaceCartProvider) {
-        self.cartProvider = cartProvider
+    init(cartHandler: CartHandler) {
+        self.cartHandler = cartHandler
     }
     
     var cartBadgeView: () -> any View {
-        cartProvider.cartBadgeView
+        cartHandler.cartBadgeView
     }
     
-    func addItem(_ item: any MarketplaceCartItem) {
-        cartProvider.addItem(item)
+    func addToCart(product: Product) {
+        Task.detached {
+            await self.cartHandler.addToCart(product)
+        }
     }
     
-    func removeItem(_ item: any MarketplaceCartItem) {
-        cartProvider.removeItem(item)
+    func removeFromCart(product: Product) {
+        Task.detached {
+            await self.cartHandler.removeFromCart(product)
+        }
     }
 }

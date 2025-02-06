@@ -1,5 +1,5 @@
 //
-//  CartView.swift
+//  ExpressCartView.swift
 //  ContractTesting
 //
 //  Created by Ahmed Elmansy on 03/02/2025.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct CartView: View {
-    @ObservedObject var viewModel: CartViewModel
+struct ExpressCartView: View {
+    @ObservedObject var viewModel: ExpressCartViewModel
     
     var body: some View {
         Button(action: {

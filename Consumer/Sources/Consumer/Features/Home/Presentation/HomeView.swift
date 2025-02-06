@@ -44,12 +44,20 @@ struct HomeView: View {
     }
   
     private func addRandomItem() {
-        let item = ConsumerCartItemModel(id: "\(Int.random(in: 0..<5))", price: 120.00, count: 1)
-        viewModel.addItem(item)
+        viewModel.addToCart(product: randomProduct)
     }
-    
+  
     private func removeRandomItem() {
-        let item = ConsumerCartItemModel(id: "\(Int.random(in: 0..<5))", price: 120.00, count: 1)
-        viewModel.removeItem(item)
+        viewModel.removeFromCart(product: randomProduct)
+    }
+  
+    private var randomProduct: Product {
+        Product(
+          id: "\(Int.random(in: 0...0))",
+            name: "",
+            price: 125.00,
+            currency: "DZD",
+            quantity: 1
+        )
     }
 }

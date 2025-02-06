@@ -9,14 +9,12 @@ import SwiftUI
 
 @MainActor
 public class HomeBuilder {
-    public static func build() -> AnyView {
-        guard let cartContract = contract else {
-            return AnyView(EmptyView())
-        }
-      
-        // TODO: Pass cart contract as a normal DI.
-        let cartHandler = CartHandler(cartContract: cartContract)
-        let viewModel = HomeViewModel(cartProvider: cartHandler)
+    public static func build(withCart cart: MarketplaceCartRepresenting) -> AnyView {
+        let cartHandler = CartHandler(
+            storeID: "B558DA5C-CD25-4ED5-8BD5-7B622382547A",
+            cartAdapter: cart
+        )
+        let viewModel = HomeViewModel(cartHandler: cartHandler)
         let view = HomeView(viewModel: viewModel)
         return AnyView(view)
     }

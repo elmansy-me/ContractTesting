@@ -7,9 +7,12 @@
 
 import SwiftUI
 import Consumer
+import CartModule
 
 struct HomeView: View {
+    let cartInteractor: MediatorInteractor
+    
     var body: some View {
-        Consumer.HomeBuilder.build()
+        Consumer.HomeBuilder.build(withCart: self.cartInteractor)
     }
 }
