@@ -15,6 +15,10 @@ final class ExpressCartViewModel: ObservableObject {
     
     init() {}
   
+    func openCart() async {
+        // TODO: Open the Cart popup.
+    }
+  
     func loadCart(forStoreID storeID: String) -> ExpressCartModel {
         let store = ExpressCartStoreModel(id: storeID, localizedName: "Store \(storeID)")
         let cartModel = ExpressCartModel(id: "FD863335-74B2-4CB5-B9C8-92568C2C7D50", store: store, items: [])
@@ -22,48 +26,57 @@ final class ExpressCartViewModel: ObservableObject {
         return cartModel
     }
   
+    func addItem(_ item: ExpressCartItem) throws -> ExpressCartModel {
+        guard var cartModel else {
+            throw NSError()
+        }
+        
+        let itemPrice = item.discountedPrice ?? item.price
+        totalPrice += itemPrice * Double(item.quantity)
+      
+        cartModel.items.append(item)
+        self.cartModel = cartModel
+        return cartModel
+    }
+    
+    func updateItem(_ item: ExpressCartItem) throws -> ExpressCartModel {
+        guard
+            var cartModel,
+            let itemIndex = cartModel.items.firstIndex(where: { $0.id == item.id })
+        else {
+            throw NSError()
+        }
+        
+        let oldItem = cartModel.items[itemIndex]
+        let oldItemPrice = oldItem.discountedPrice ?? oldItem.price
+        let oldTotalPrice = oldItemPrice * Double(oldItem.quantity)
+        let itemPrice = item.discountedPrice ?? item.price
+        totalPrice += itemPrice * Double(item.quantity) - oldTotalPrice
+      
+        cartModel.items[itemIndex] = item
+        self.cartModel = cartModel
+        return cartModel
+    }
+  
+    func removeItem(_ item: ExpressCartItem) throws -> ExpressCartModel {
+        guard
+            var cartModel,
+            let itemIndex = cartModel.items.firstIndex(where: { $0.id == item.id })
+        else {
+            throw NSError()
+        }
+      
+        let oldItem = cartModel.items[itemIndex]
+        let oldItemPrice = oldItem.discountedPrice ?? oldItem.price
+        let oldTotalPrice = oldItemPrice * Double(oldItem.quantity)
+        totalPrice -= oldTotalPrice
+      
+        cartModel.items.remove(at: itemIndex)
+        self.cartModel = cartModel
+        return cartModel
+    }
+  
     func clearCart() {
         cartModel = nil
     }
-  
-//    func addItem(_ item: any ExpressCartItem, toCart cart: any ExpressCart) -> any ExpressCart {
-//      guard cart.id == cartModel?.id else {
-//          throw NSError()
-//      }
-//      if cartModel?.items.contains(where: { item.id == $0.id }) {
-//        
-//      } else {
-//        cartModel?.items.append(item)
-//      }
-//    }
-  
-      func addItemPrice(_ price: Double) throws -> ExpressCartModel {
-          guard let cartModel else {
-            throw NSError()
-          }
-        
-          totalPrice += price
-          return cartModel
-      }
-  
-      func updateItemPrice(_ price: Double) throws -> ExpressCartModel {
-          guard let cartModel else {
-            throw NSError()
-          }
-        
-          totalPrice += price
-          return cartModel
-      }
-    
-      func substractItemPrice(_ price: Double) throws -> ExpressCartModel {
-          guard let cartModel else {
-            throw NSError()
-          }
-        
-          if totalPrice >= price {
-              totalPrice -= price
-              return cartModel
-          }
-          return cartModel
-      }
 }

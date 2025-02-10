@@ -16,8 +16,13 @@ final class CartMediatorImpl: MediatorInteractor {
         self.cartProvider = cartProvider
     }
     
-    var cartBadgeView: () -> any View {
-        cartProvider.cartBadgeView
+    func cartBadgeView(forStore store: any MarketplaceStore) -> MarketplaceCartRepresenting.BadgeViewWrapper {
+        let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
+        return cartProvider.cartBadgeView(forStore: mappedStore)
+    }
+  
+    func openCart() async {
+        await cartProvider.openCart()
     }
   
     func setConfigurations(_ configurations: [MarketplaceCartConfiguration]) async {
@@ -27,55 +32,52 @@ final class CartMediatorImpl: MediatorInteractor {
         )
     }
     
-    func cart(forStoreID storeID: String) async throws -> any MarketplaceCart {
-        let cart = try await cartProvider.cart(forStoreID: storeID)
-        return CartMediatorModel(id: cart.id, store: cart.store, items: cart.items).marketplaceCart
+    func cart(forStore store: any MarketplaceStore) async throws -> any MarketplaceCart {
+        let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
+        let cart = try await cartProvider.cart(forStore: mappedStore)
+        return CartMediatorModel(expressCart: cart)
     }
     
     func addItem(
         _ item: any MarketplaceCartItem,
-        toCart cart: any MarketplaceCart
+        fromStore store: any MarketplaceStore
     ) async throws -> any MarketplaceCart {
-        let cart = CartMediatorModel(marketplaceCart: cart)
-        let item = CartItemMediatorModel(marketplaceItem: item)
+        let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
+        let mappedItem = CartItemMediatorModel(marketplaceItem: item)
 
         print("🔥 ParentApp: Passing consumer's AddItem request to CartModule")
       
-        let updatedCart = try await cartProvider.addItem(item, toCart: cart)
-        return CartMediatorModel(id: updatedCart.id, store: updatedCart.store, items: updatedCart.items).marketplaceCart
+        let cart = try await cartProvider.addItem(mappedItem, fromStore: mappedStore)
+        return CartMediatorModel(expressCart: cart)
     }
     
     func updateItem(
         _ item: any MarketplaceCartItem,
-        inCart cart: any MarketplaceCart
+        fromStore store: any MarketplaceStore
     ) async throws -> any MarketplaceCart {
-        let cart = CartMediatorModel(marketplaceCart: cart)
-        let item = CartItemMediatorModel(marketplaceItem: item)
+        let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
+        let mappedItem = CartItemMediatorModel(marketplaceItem: item)
 
         print("🔥 ParentApp: Passing consumer's UpdateItem request to CartModule")
       
-        let updatedCart = try await cartProvider.updateItem(item, inCart: cart)
-        return CartMediatorModel(id: updatedCart.id, store: updatedCart.store, items: updatedCart.items).marketplaceCart
+        let cart = try await cartProvider.updateItem(mappedItem, fromStore: mappedStore)
+        return CartMediatorModel(expressCart: cart)
     }
     
     func removeItem(
         _ item: any MarketplaceCartItem,
-        fromCart cart: any MarketplaceCart
+        fromStore store: any MarketplaceStore
     ) async throws -> any MarketplaceCart {
-        let cart = CartMediatorModel(marketplaceCart: cart)
-        let item = CartItemMediatorModel(marketplaceItem: item)
+        let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
+        let mappedItem = CartItemMediatorModel(marketplaceItem: item)
 
         print("🔥 ParentApp: Passing consumer's RemoveItem request to CartModule")
       
-        let updatedCart = try await cartProvider.removeItem(item, fromCart: cart)
-        return CartMediatorModel(id: updatedCart.id, store: updatedCart.store, items: updatedCart.items).marketplaceCart
+        let cart = try await cartProvider.removeItem(mappedItem, fromStore: mappedStore)
+        return CartMediatorModel(expressCart: cart)
     }
     
     func clearCart() async throws {
         try await cartProvider.clearCart()
-    }
-    
-    func openCart() async {
-        await cartProvider.openCart()
     }
 }

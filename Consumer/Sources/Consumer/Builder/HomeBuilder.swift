@@ -10,8 +10,9 @@ import SwiftUI
 @MainActor
 public class HomeBuilder {
     public static func build(withCart cart: MarketplaceCartRepresenting) -> AnyView {
+      let store = Store(id: "B558DA5C-CD25-4ED5-8BD5-7B622382547A", localizedName: "Carrefour")
         let cartHandler = CartHandler(
-            storeID: "B558DA5C-CD25-4ED5-8BD5-7B622382547A",
+            store: store,
             cartAdapter: cart
         )
         let viewModel = HomeViewModel(cartHandler: cartHandler)

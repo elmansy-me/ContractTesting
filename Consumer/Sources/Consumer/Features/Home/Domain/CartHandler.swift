@@ -11,11 +11,11 @@ import Combine
 
 actor CartHandler {
     nonisolated private let cartAdapter: MarketplaceCartRepresenting
-    private let storeID: String
+    private let store: Store
     private var cartState: (any MarketplaceCart)?
     
-    init(storeID: String, cartAdapter: MarketplaceCartRepresenting) {
-        self.storeID = storeID
+    init(store: Store, cartAdapter: MarketplaceCartRepresenting) {
+        self.store = store
         self.cartAdapter = cartAdapter
         Task.detached {
             await self.loadCart()
@@ -23,7 +23,7 @@ actor CartHandler {
     }
   
     private func loadCart() async {
-        if let newCartState = try? await cartAdapter.cart(forStoreID: self.storeID) {
+        if let newCartState = try? await cartAdapter.cart(forStore: self.store) {
             await self.updateCartState(with: newCartState)
         }
     }
@@ -36,7 +36,7 @@ actor CartHandler {
 
     @MainActor
     var cartBadgeView: () -> any View {
-        cartAdapter.cartBadgeView
+        cartAdapter.cartBadgeView(forStore: store)
     }
 
     func openCart() async {
@@ -48,21 +48,18 @@ actor CartHandler {
     var cart: any MarketplaceCart {
         get async throws {
             do {
-                return try await cartAdapter.cart(forStoreID: storeID)
+                return try await cartAdapter.cart(forStore: store)
             }
         }
     }
 
     func addToCart(_ item: any MarketplaceCartItem) async {
-        guard let cartState = cartState else {
-            return
-        }
         if await isItemAddedToCart(item) {
-            if let updatedCart = try? await cartAdapter.updateItem(item, inCart: cartState) {
+            if let updatedCart = try? await cartAdapter.updateItem(item, fromStore: store) {
                 await self.updateCartState(with: updatedCart)
             }
         } else {
-            if let updatedCart = try? await cartAdapter.addItem(item, toCart: cartState) {
+            if let updatedCart = try? await cartAdapter.addItem(item, fromStore: store) {
                 await self.updateCartState(with: updatedCart)
             }
         }
@@ -75,14 +72,9 @@ actor CartHandler {
         else {
             return
         }
-        if (cartState.items.first(where: { item.id == $0.id })?.quantity ?? 0) > 1 {
-            if let updatedCart = try? await cartAdapter.updateItem(item, inCart: cartState) {
-                await self.updateCartState(with: updatedCart)
-            }
-        } else {
-            if let updatedCart = try? await cartAdapter.removeItem(item, fromCart: cartState) {
-                await self.updateCartState(with: updatedCart)
-            }
+        
+        if let updatedCart = try? await cartAdapter.removeItem(item, fromStore: store) {
+            await self.updateCartState(with: updatedCart)
         }
     }
 

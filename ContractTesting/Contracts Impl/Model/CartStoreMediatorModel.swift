@@ -8,7 +8,7 @@
 import CartModule
 import Consumer
 
-struct CartStoreMediatorModel: ExpressCartStore {
+struct CartStoreMediatorModel: ExpressCartStore, MarketplaceStore {
     let id: String
     let localizedName: String
   
@@ -20,18 +20,5 @@ struct CartStoreMediatorModel: ExpressCartStore {
     init(marketplaceStore: any MarketplaceStore) {
         self.id = marketplaceStore.id
         self.localizedName = marketplaceStore.localizedName
-    }
-}
-
-// Backward model mapping
-
-extension CartStoreMediatorModel {
-    private struct ConsumerStoreModel: MarketplaceStore {
-        let id: String
-        let localizedName: String
-    }
-  
-    var marketplaceStore: any MarketplaceStore {
-        ConsumerStoreModel(id: id, localizedName: localizedName)
     }
 }

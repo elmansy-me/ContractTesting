@@ -6,7 +6,7 @@
 //
 
 struct Cart: MarketplaceCart {
-    var id: String
-    var store: any MarketplaceStore
-    var items: [any MarketplaceCartItem]
+    let id: String
+    let store: any MarketplaceStore
+    let items: [any MarketplaceCartItem]
 }

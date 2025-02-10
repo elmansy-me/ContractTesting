@@ -1,14 +1,11 @@
 //
 //  CartItem.swift
-//  ContractTesting
+//  Consumer
 //
-//  Created by Ahmed Elmansy on 03/02/2025.
+//  Created by Pavlo Bilohaienko on 07.02.2025.
 //
 
-import CartModule
-import Consumer
-
-struct CartItemMediatorModel: ExpressCartItem, MarketplaceCartItem {
+struct CartItem: MarketplaceCartItem {
     let id: String
     let name: String
     let price: Double
@@ -31,13 +28,16 @@ struct CartItemMediatorModel: ExpressCartItem, MarketplaceCartItem {
         self.currency = currency
         self.quantity = quantity
     }
-    
-    init(marketplaceItem: any MarketplaceCartItem) {
-        self.id = marketplaceItem.id
-        self.name = marketplaceItem.name
-        self.price = marketplaceItem.price
-        self.discountedPrice = marketplaceItem.discountedPrice
-        self.currency = marketplaceItem.currency
-        self.quantity = marketplaceItem.quantity
+}
+ 
+// Providing initializer for internal usage.
+extension CartItem {
+    init(product: Product, quantity: Int) {
+        self.id = product.id
+        self.name = product.name
+        self.price = product.price
+        self.discountedPrice = product.discountedPrice
+        self.currency = product.currency
+        self.quantity = quantity
     }
 }

@@ -5,10 +5,10 @@
 //  Created by Ahmed Elmansy on 03/02/2025.
 //
 
-struct Product: MarketplaceCartItem {
-    var id: String
-    var name: String
-    var price: Double
-    var currency: String
-    var quantity: Int
+struct Product {
+    let id: String
+    let name: String
+    let price: Double
+    let discountedPrice: Double?
+    let currency: String
 }

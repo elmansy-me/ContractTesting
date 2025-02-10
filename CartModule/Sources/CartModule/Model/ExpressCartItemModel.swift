@@ -9,6 +9,7 @@ struct ExpressCartItemModel: ExpressCartItem {
     let id: String
     let name: String
     let price: Double
+    let discountedPrice: Double?
     let currency: String
-    var quantity: Int
+    let quantity: Int
 }

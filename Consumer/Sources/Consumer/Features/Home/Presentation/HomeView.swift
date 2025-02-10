@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
+    @State private var isCartBadgePresented: Bool = false
     
     var body: some View {
         VStack {
@@ -38,9 +39,18 @@ struct HomeView: View {
                 .font(.headline)
                 .foregroundColor(Color.primary)
           
-            AnyView(viewModel.cartBadgeView())
+            if isCartBadgePresented {
+                AnyView(viewModel.cartBadgeView())
+            }
         }
         .padding()
+        .onAppear {
+            // For simulation purposes only
+            Task {
+                await Task.sleep(3_000_000_000) // 3 seconds delay
+                isCartBadgePresented = true
+            }
+        }
     }
   
     private func addRandomItem() {
@@ -53,11 +63,11 @@ struct HomeView: View {
   
     private var randomProduct: Product {
         Product(
-          id: "\(Int.random(in: 0...0))",
+            id: "\(Int.random(in: 0...0))",
             name: "",
             price: 125.00,
-            currency: "DZD",
-            quantity: 1
+            discountedPrice: 110.00,
+            currency: "DZD"
         )
     }
 }

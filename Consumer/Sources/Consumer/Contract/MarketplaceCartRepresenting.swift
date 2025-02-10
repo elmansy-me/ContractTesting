@@ -7,4 +7,5 @@
 
 import Foundation
 
+/// Unitied exposed interface for the Cart intents.
 public typealias MarketplaceCartRepresenting = MarketplaceCartActionsHandler & MarketplaceCartUIProvider

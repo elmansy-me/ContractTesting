@@ -3,10 +3,8 @@
 
 @MainActor
 public class ExpressCartModule {
-    
-  static public let contract: ExpressCartInteractor = {
-     let viewModel = ExpressCartViewModel()
-      return ExpressCartInteractorImpl(viewModel: viewModel)
-  }()
-    
+    static public let contract: ExpressCartInteractor = {
+       let viewModel = ExpressCartViewModel()
+        return ExpressCartInteractorImpl(viewModel: viewModel)
+    }()
 }

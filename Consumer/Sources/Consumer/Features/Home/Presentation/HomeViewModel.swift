@@ -23,13 +23,16 @@ class HomeViewModel: ObservableObject {
     
     func addToCart(product: Product) {
         Task.detached {
-            await self.cartHandler.addToCart(product)
+            let randomQuantity: Int = Int.random(in: 1...3)
+            let item = CartItem(product: product, quantity: randomQuantity)
+            await self.cartHandler.addToCart(item)
         }
     }
     
     func removeFromCart(product: Product) {
         Task.detached {
-            await self.cartHandler.removeFromCart(product)
+            let item = CartItem(product: product, quantity: 1)
+            await self.cartHandler.removeFromCart(item)
         }
     }
 }
