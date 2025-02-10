@@ -6,6 +6,8 @@
 //
 
 struct Store: MarketplaceStore {
-    var id: String
-    var localizedName: String
+    let id: String
+    let localizedName: String
+    let minimumOrder: Double
+    let currency: String
 }

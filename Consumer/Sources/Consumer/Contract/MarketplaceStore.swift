@@ -10,5 +10,7 @@ import Foundation
 public protocol MarketplaceStore: Identifiable, Sendable {
     var id: String { get }
     var localizedName: String { get }
-    // TODO: To check if we need to pass minimum order here.
+    var minimumOrder: Double { get }
+    var currency: String { get }
+    // TODO: To add optional offer info here (not supported in MVP from MP end).
 }

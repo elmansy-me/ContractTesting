@@ -10,4 +10,6 @@ import Foundation
 struct ExpressCartStoreModel: ExpressCartStore {
     let id: String
     let localizedName: String
+    let minimumOrder: Double
+    let currency: String
 }

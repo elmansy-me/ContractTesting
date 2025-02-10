@@ -11,14 +11,20 @@ import Consumer
 struct CartStoreMediatorModel: ExpressCartStore, MarketplaceStore {
     let id: String
     let localizedName: String
+    let minimumOrder: Double
+    let currency: String
   
-    init(id: String, localizedName: String) {
+    init(id: String, localizedName: String, minimumOrder: Double, currency: String) {
         self.id = id
         self.localizedName = localizedName
+        self.minimumOrder = minimumOrder
+        self.currency = currency
     }
   
     init(marketplaceStore: any MarketplaceStore) {
         self.id = marketplaceStore.id
         self.localizedName = marketplaceStore.localizedName
+        self.minimumOrder = marketplaceStore.minimumOrder
+        self.currency = marketplaceStore.currency
     }
 }

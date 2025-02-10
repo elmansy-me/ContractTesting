@@ -10,7 +10,12 @@ import SwiftUI
 @MainActor
 public class HomeBuilder {
     public static func build(withCart cart: MarketplaceCartRepresenting) -> AnyView {
-      let store = Store(id: "B558DA5C-CD25-4ED5-8BD5-7B622382547A", localizedName: "Carrefour")
+        let store = Store(
+            id: "B558DA5C-CD25-4ED5-8BD5-7B622382547A",
+            localizedName: "Carrefour",
+            minimumOrder: 320.00,
+            currency: "DZD"
+        )
         let cartHandler = CartHandler(
             store: store,
             cartAdapter: cart

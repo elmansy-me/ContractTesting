@@ -19,8 +19,7 @@ final class ExpressCartViewModel: ObservableObject {
         // TODO: Open the Cart popup.
     }
   
-    func loadCart(forStoreID storeID: String) -> ExpressCartModel {
-        let store = ExpressCartStoreModel(id: storeID, localizedName: "Store \(storeID)")
+    func loadCart(forStore store: any ExpressCartStore) -> ExpressCartModel {
         let cartModel = ExpressCartModel(id: "FD863335-74B2-4CB5-B9C8-92568C2C7D50", store: store, items: [])
         self.cartModel = cartModel
         return cartModel

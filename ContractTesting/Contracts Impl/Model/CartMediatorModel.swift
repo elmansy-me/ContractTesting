@@ -23,7 +23,9 @@ struct CartMediatorModel: MarketplaceCart {
         self.id = expressCart.id
         self.store = CartStoreMediatorModel(
             id: expressCart.store.id,
-            localizedName: expressCart.store.localizedName
+            localizedName: expressCart.store.localizedName,
+            minimumOrder: expressCart.store.minimumOrder,
+            currency: expressCart.store.currency
         )
         self.items = expressCart.items.map { item in
             CartItemMediatorModel(

@@ -8,4 +8,6 @@
 public protocol ExpressCartStore: Sendable {
     var id: String { get }
     var localizedName: String { get }
+    var minimumOrder: Double { get }
+    var currency: String { get }
 }

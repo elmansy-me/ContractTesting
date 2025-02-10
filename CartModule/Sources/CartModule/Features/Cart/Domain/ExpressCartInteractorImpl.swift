@@ -27,7 +27,7 @@ final class ExpressCartInteractorImpl: ExpressCartInteractor {
     }
   
     func cart(forStore store: any ExpressCartStore) async throws -> any ExpressCart {
-        await cartViewModel.loadCart(forStoreID: store.id)
+        await cartViewModel.loadCart(forStore: store)
     }
   
     func configure(recommendedItemsDisplayed: Bool, addressChangeAllowed: Bool) {
