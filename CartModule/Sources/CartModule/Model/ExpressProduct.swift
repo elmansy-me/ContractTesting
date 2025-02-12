@@ -1,11 +1,11 @@
 //
-//  Product.swift
+//  ExpressProduct.swift
 //  CartModule
 //
-//  Created by Ahmed Elmansy on 03/02/2025.
+//  Created by Pavlo Bilohaienko on 10.02.2025.
 //
 
-struct Product: MarketplaceSellingItem {
+struct ExpressProduct: ExpressSellingItem {
     let id: String
     let name: String
     let price: Double

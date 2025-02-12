@@ -13,8 +13,8 @@ public class HomeBuilder {
         let store = Store(
             id: "B558DA5C-CD25-4ED5-8BD5-7B622382547A",
             localizedName: "Carrefour",
-            minimumOrder: 320.00,
-            currency: "DZD"
+            currency: "DZD",
+            minimumOrder: 320.00
         )
         let cartHandler = CartHandler(
             store: store,

@@ -8,36 +8,20 @@
 import CartModule
 import Consumer
 
-struct CartItemMediatorModel: ExpressCartItem, MarketplaceCartItem {
+struct CartItemMediatorModel: MarketplaceCartItem {
     let id: String
-    let name: String
-    let price: Double
-    let discountedPrice: Double?
-    let currency: String
+    let sellingItem: any MarketplaceSellingItem
     let quantity: Int
   
-    init(
-        id: String,
-        name: String,
-        price: Double,
-        discountedPrice: Double?,
-        currency: String,
-        quantity: Int
-    ) {
+    init(id: String, sellingItem: ExpressSellingItem, quantity: Int) {
         self.id = id
-        self.name = name
-        self.price = price
-        self.discountedPrice = discountedPrice
-        self.currency = currency
+        self.sellingItem = CartSellingItemMediatonModel(
+            id: sellingItem.id,
+            name: sellingItem.name,
+            price: sellingItem.price,
+            discountedPrice: sellingItem.discountedPrice,
+            currency: sellingItem.currency
+        )
         self.quantity = quantity
-    }
-    
-    init(marketplaceItem: any MarketplaceCartItem) {
-        self.id = marketplaceItem.id
-        self.name = marketplaceItem.name
-        self.price = marketplaceItem.price
-        self.discountedPrice = marketplaceItem.discountedPrice
-        self.currency = marketplaceItem.currency
-        self.quantity = marketplaceItem.quantity
     }
 }

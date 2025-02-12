@@ -28,14 +28,18 @@ struct CartMediatorModel: MarketplaceCart {
             currency: expressCart.store.currency
         )
         self.items = expressCart.items.map { item in
-            CartItemMediatorModel(
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                discountedPrice: item.discountedPrice,
-                currency: item.currency,
-                quantity: item.quantity
-            )
+          let sellingItem = CartSellingItemMediatonModel(
+              id: item.sellingItem.id,
+              name: item.sellingItem.name,
+              price: item.sellingItem.price,
+              discountedPrice: item.sellingItem.discountedPrice,
+              currency: item.sellingItem.currency
+          )
+          return CartItemMediatorModel(
+              id: item.id,
+              sellingItem: sellingItem,
+              quantity: item.quantity
+          )
         }
     }
 }

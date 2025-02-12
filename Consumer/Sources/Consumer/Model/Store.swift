@@ -8,6 +8,6 @@
 struct Store: MarketplaceStore {
     let id: String
     let localizedName: String
-    let minimumOrder: Double
     let currency: String
+    let minimumOrder: Double
 }

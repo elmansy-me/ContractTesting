@@ -7,9 +7,6 @@
 
 public protocol ExpressCartItem: Sendable {
     var id: String { get }
-    var name: String { get }
-    var price: Double { get }
-    var discountedPrice: Double? { get }
-    var currency: String { get }
+    var sellingItem: ExpressSellingItem { get } // Basically, a Product
     var quantity: Int { get }
 }

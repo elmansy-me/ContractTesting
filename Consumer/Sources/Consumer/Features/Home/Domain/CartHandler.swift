@@ -53,27 +53,24 @@ actor CartHandler {
         }
     }
 
-    func addToCart(_ item: any MarketplaceCartItem) async {
+    func addToCart(_ item: any MarketplaceSellingItem, quantity: Int) async {
         if await isItemAddedToCart(item) {
-            if let updatedCart = try? await cartAdapter.updateItem(item, fromStore: store) {
+            if let updatedCart = try? await cartAdapter.updateItem(item, newQuantity: quantity, forStore: store) {
                 await self.updateCartState(with: updatedCart)
             }
         } else {
-            if let updatedCart = try? await cartAdapter.addItem(item, fromStore: store) {
+            if let updatedCart = try? await cartAdapter.addItem(item, quantity: quantity, forStore: store) {
                 await self.updateCartState(with: updatedCart)
             }
         }
     }
   
-    func removeFromCart(_ item: any MarketplaceCartItem) async {
-        guard
-            let cartState = cartState,
-            await isItemAddedToCart(item)
-        else {
+    func removeFromCart(_ item: any MarketplaceSellingItem) async {
+        guard await isItemAddedToCart(item) else {
             return
         }
         
-        if let updatedCart = try? await cartAdapter.removeItem(item, fromStore: store) {
+        if let updatedCart = try? await cartAdapter.removeItem(item, forStore: store) {
             await self.updateCartState(with: updatedCart)
         }
     }
@@ -84,10 +81,10 @@ actor CartHandler {
   
     // Private
   
-    private func isItemAddedToCart(_ item: any MarketplaceCartItem) async -> Bool {
+    private func isItemAddedToCart(_ item: any MarketplaceSellingItem) async -> Bool {
         guard let cartState = cartState else {
             return false
         }
-        return cartState.items.contains(where: { $0.id == item.id })
+        return cartState.items.contains(where: { $0.sellingItem.id == item.id })
     }
 }
