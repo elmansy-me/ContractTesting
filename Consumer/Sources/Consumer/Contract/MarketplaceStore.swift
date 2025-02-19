@@ -12,5 +12,5 @@ public protocol MarketplaceStore: Identifiable, Sendable {
     var localizedName: String { get }
     var currency: String { get }
     var minimumOrder: Double { get }
-    // TODO: To add optional offer info here (not supported in MVP from MP end).
+    // TODO: Add optional offer info here (not supported in MVP from MP end).
 }

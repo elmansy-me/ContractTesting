@@ -9,6 +9,6 @@
 // - is_Marketplace_Cart_Recommended_Items_Enables
 
 public enum MarketplaceCartConfiguration: CaseIterable, Sendable {
-    case recommendedItemsVisible
-    case addressChanging
+    case recommendedItemsVisible // Enabling recommended items display in the Cart.
+    case addressChanging // Enabling the address change during the Checkout.
 }

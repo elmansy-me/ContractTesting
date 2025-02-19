@@ -67,7 +67,9 @@ struct HomeView: View {
             name: "",
             price: 125.00,
             discountedPrice: 110.00,
-            currency: "DZD"
+            currency: "DZD",
+            maxQuantity: 10,
+            imageURL: "https://fakeimg.pl/300"
         )
     }
 }

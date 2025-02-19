@@ -30,10 +30,12 @@ struct CartMediatorModel: MarketplaceCart {
         self.items = expressCart.items.map { item in
           let sellingItem = CartSellingItemMediatonModel(
               id: item.sellingItem.id,
-              name: item.sellingItem.name,
+              localizedName: item.sellingItem.localizedName,
               price: item.sellingItem.price,
               discountedPrice: item.sellingItem.discountedPrice,
-              currency: item.sellingItem.currency
+              currency: item.sellingItem.currency,
+              maxQuantity: item.sellingItem.maxQuantity,
+              imageURL: item.sellingItem.imageURL
           )
           return CartItemMediatorModel(
               id: item.id,

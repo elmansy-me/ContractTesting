@@ -17,10 +17,12 @@ struct CartItemMediatorModel: MarketplaceCartItem {
         self.id = id
         self.sellingItem = CartSellingItemMediatonModel(
             id: sellingItem.id,
-            name: sellingItem.name,
+            localizedName: sellingItem.localizedName,
             price: sellingItem.price,
             discountedPrice: sellingItem.discountedPrice,
-            currency: sellingItem.currency
+            currency: sellingItem.currency,
+            maxQuantity: sellingItem.maxQuantity,
+            imageURL: sellingItem.imageURL
         )
         self.quantity = quantity
     }

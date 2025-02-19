@@ -11,4 +11,10 @@ struct Product: MarketplaceSellingItem {
     let price: Double
     let discountedPrice: Double?
     let currency: String
+    let maxQuantity: Int
+    let imageURL: String
+  
+    var localizedName: String {
+        name
+    }
 }
