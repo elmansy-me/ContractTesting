@@ -31,6 +31,17 @@ final class CartMediatorImpl: MediatorInteractor {
             addressChangeAllowed: configurations.contains(.addressChanging)
         )
     }
+  
+    func subscribeToCartUpdates(
+        forStore store: any MarketplaceStore,
+        handler: @escaping MarketplaceCartActionsHandler.CartUpdatesHandler
+    ) async {
+        await self.cartProvider.subscribeToCartUpdates(
+            forStore: CartStoreMediatorModel(marketplaceStore: store)
+        ) { updatedCart in
+            await handler(CartMediatorModel(expressCart: updatedCart))
+        }
+    }
     
     func cart(forStore store: any MarketplaceStore) async throws -> any MarketplaceCart {
         let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
@@ -42,41 +53,38 @@ final class CartMediatorImpl: MediatorInteractor {
         _ item: any MarketplaceSellingItem,
         quantity: Int,
         forStore store: any MarketplaceStore
-    ) async throws -> any MarketplaceCart {
+    ) async throws {
         let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
         let mappedItem = CartSellingItemMediatonModel(marketplaceItem: item)
 
         print("🔥 ParentApp: Passing consumer's AddItem request to CartModule")
       
         let cart = try await cartProvider.addItem(mappedItem, quantity: quantity, forStore: mappedStore)
-        return CartMediatorModel(expressCart: cart)
     }
     
     func updateItem(
         _ item: any MarketplaceSellingItem,
         newQuantity: Int,
         forStore store: any MarketplaceStore
-    ) async throws -> any MarketplaceCart {
+    ) async throws {
         let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
         let mappedItem = CartSellingItemMediatonModel(marketplaceItem: item)
 
         print("🔥 ParentApp: Passing consumer's UpdateItem request to CartModule")
       
         let cart = try await cartProvider.updateItem(mappedItem, newQuantity: newQuantity, forStore: mappedStore)
-        return CartMediatorModel(expressCart: cart)
     }
     
     func removeItem(
         _ item: any MarketplaceSellingItem,
         forStore store: any MarketplaceStore
-    ) async throws -> any MarketplaceCart {
+    ) async throws {
         let mappedStore = CartStoreMediatorModel(marketplaceStore: store)
         let mappedItem = CartSellingItemMediatonModel(marketplaceItem: item)
 
         print("🔥 ParentApp: Passing consumer's RemoveItem request to CartModule")
       
         let cart = try await cartProvider.removeItem(mappedItem, forStore: mappedStore)
-        return CartMediatorModel(expressCart: cart)
     }
     
     func clearCart() async throws {

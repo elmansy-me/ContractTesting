@@ -11,11 +11,14 @@ import Combine
 
 public protocol ExpressCartInteractor: Sendable {
     typealias BadgeViewWrapper = () -> any View
+    typealias CartUpdatesHandler = @Sendable (any ExpressCart) async -> Void
   
     func cartBadgeView(forStore store: ExpressCartStore) -> BadgeViewWrapper
     func openCart() async
   
     func cart(forStore store: ExpressCartStore) async throws -> any ExpressCart
+    func subscribeToCartUpdates(forStore store: any ExpressCartStore, handler: @escaping CartUpdatesHandler) async
+        
     func configure(recommendedItemsDisplayed: Bool, addressChangeAllowed: Bool)
     func clearCart() async throws
   

@@ -17,8 +17,10 @@ actor CartHandler {
     init(store: Store, cartAdapter: MarketplaceCartRepresenting) {
         self.store = store
         self.cartAdapter = cartAdapter
+      
         Task.detached {
             await self.loadCart()
+            await self.subscribeToCartUpdates()
         }
     }
   
@@ -28,6 +30,12 @@ actor CartHandler {
         }
     }
   
+    private func subscribeToCartUpdates() async {
+        await cartAdapter.subscribeToCartUpdates(forStore: store) { updatedCart in
+            await self.updateCartState(with: updatedCart)
+        }
+    }
+
     private func updateCartState(with cart: any MarketplaceCart) async {
         self.cartState = cart
     }
@@ -55,13 +63,9 @@ actor CartHandler {
 
     func addToCart(_ item: any MarketplaceSellingItem, quantity: Int) async {
         if await isItemAddedToCart(item) {
-            if let updatedCart = try? await cartAdapter.updateItem(item, newQuantity: quantity, forStore: store) {
-                await self.updateCartState(with: updatedCart)
-            }
+            try? await cartAdapter.updateItem(item, newQuantity: quantity, forStore: store)
         } else {
-            if let updatedCart = try? await cartAdapter.addItem(item, quantity: quantity, forStore: store) {
-                await self.updateCartState(with: updatedCart)
-            }
+            try? await cartAdapter.addItem(item, quantity: quantity, forStore: store)
         }
     }
   
@@ -70,9 +74,7 @@ actor CartHandler {
             return
         }
         
-        if let updatedCart = try? await cartAdapter.removeItem(item, forStore: store) {
-            await self.updateCartState(with: updatedCart)
-        }
+        try? await cartAdapter.removeItem(item, forStore: store)
     }
 
     func clearCart() async throws {

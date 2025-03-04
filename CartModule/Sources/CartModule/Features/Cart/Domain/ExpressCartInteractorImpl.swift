@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 final class ExpressCartInteractorImpl: ExpressCartInteractor {
+  
     private let cartViewModel: ExpressCartViewModel
   
     init(viewModel: ExpressCartViewModel) {
@@ -28,6 +29,18 @@ final class ExpressCartInteractorImpl: ExpressCartInteractor {
   
     func cart(forStore store: any ExpressCartStore) async throws -> any ExpressCart {
         await cartViewModel.loadCart(forStore: store)
+    }
+  
+    @MainActor
+    func subscribeToCartUpdates(forStore store: any ExpressCartStore, handler: @escaping CartUpdatesHandler) async {
+        cartViewModel.onCartUpdate = { updatedCart in
+            if let updatedCart {
+                Task.detached {
+                    await handler(updatedCart)
+                }
+            }
+        }
+        _ = cartViewModel.loadCart(forStore: store)
     }
   
     func configure(recommendedItemsDisplayed: Bool, addressChangeAllowed: Bool) {

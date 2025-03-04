@@ -9,7 +9,12 @@ import Foundation
 
 @MainActor
 final class ExpressCartViewModel: ObservableObject {
-    private var cartModel: ExpressCartModel?
+    private var cartModel: ExpressCartModel? {
+        didSet {
+            onCartUpdate?(cartModel)
+        }
+    }
+    var onCartUpdate: ((ExpressCart?) -> Void)?
     
     @Published var totalPrice: Double = 0
     
