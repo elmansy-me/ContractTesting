@@ -47,15 +47,15 @@ final class ExpressCartInteractorImpl: ExpressCartInteractor {
         // TODO: Add implementation
     }
   
-    func addItem(_ item: any ExpressSellingItem, quantity: Int, forStore store: any ExpressCartStore) async throws -> any ExpressCart {
+    func addItem(_ item: any ExpressSellingItem, quantity: Int, forStore store: any ExpressCartStore) async throws  {
         try await self.cartViewModel.addItem(item, quantity: quantity)
     }
     
-    func updateItem(_ item: any ExpressSellingItem, newQuantity: Int, forStore store: any ExpressCartStore) async throws -> any ExpressCart {
+    func updateItem(_ item: any ExpressSellingItem, newQuantity: Int, forStore store: any ExpressCartStore) async throws {
         try await cartViewModel.updateItem(item, newQuantity: newQuantity)
     }
     
-    func removeItem(_ item: any ExpressSellingItem, forStore store: any ExpressCartStore) async throws -> any ExpressCart {
+    func removeItem(_ item: any ExpressSellingItem, forStore store: any ExpressCartStore) async throws {
         try await cartViewModel.removeItem(item)
     }
   

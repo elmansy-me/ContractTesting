@@ -6,17 +6,18 @@
 //
 
 public protocol MarketplaceCartActionsHandler: Sendable {
+    typealias CartUpdatesHandler = @Sendable (any MarketplaceCart) async -> Void
+  
     func setConfigurations(_ configurations: [MarketplaceCartConfiguration]) async
   
     /// Other error types: succsess of failure as a result (current).
     func cart(forStore store: any MarketplaceStore) async throws -> any MarketplaceCart
   
-    typealias CartUpdatesHandler = @Sendable (any MarketplaceCart) async -> Void
-  
-    // Not sure, if it needs to also return the initial Cart state or not (requesting separately).
+    /// Using a closure to subscribe for updates of the Cart.
+    /// Is expected to receive updated Cart only after each action's successful completion.
     func subscribeToCartUpdates(forStore store: any MarketplaceStore, handler: @escaping CartUpdatesHandler) async
     
-      /// This action is expected to be used only for adding Product to the Cart for the first time.
+    /// This action is expected to be used only for adding Product to the Cart for the first time.
     func addItem(
       _ item: any MarketplaceSellingItem,
       quantity: Int,

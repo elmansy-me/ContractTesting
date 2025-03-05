@@ -22,7 +22,7 @@ public protocol ExpressCartInteractor: Sendable {
     func configure(recommendedItemsDisplayed: Bool, addressChangeAllowed: Bool)
     func clearCart() async throws
   
-    func addItem(_ item: any ExpressSellingItem, quantity: Int, forStore store: any ExpressCartStore) async throws -> any ExpressCart
-    func updateItem(_ item: any ExpressSellingItem, newQuantity: Int, forStore store: any ExpressCartStore) async throws -> any ExpressCart
-    func removeItem(_ item: any ExpressSellingItem, forStore store: any ExpressCartStore) async throws -> any ExpressCart
+    func addItem(_ item: any ExpressSellingItem, quantity: Int, forStore store: any ExpressCartStore) async throws
+    func updateItem(_ item: any ExpressSellingItem, newQuantity: Int, forStore store: any ExpressCartStore) async throws
+    func removeItem(_ item: any ExpressSellingItem, forStore store: any ExpressCartStore) async throws
 }
